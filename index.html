@@ -10,73 +10,69 @@
   <!-- AR.js adds marker tracking on top of A-Frame.
        Pinned to version 3.4.8 so an update can't break us mid-hackathon. -->
   <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.8/aframe/build/aframe-ar.js"></script>
+
+  <style>
+    /* The control bar sits on top of the camera view at the bottom of the screen. */
+    #controls {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px 28px; background: rgba(12, 12, 10, 0.82);
+      color: #e8e2d4; font-family: monospace; font-size: 15px;
+    }
+    #mode-button {
+      font: inherit; padding: 10px 14px; border: 1px solid #f2b33d;
+      background: transparent; color: #f2b33d; border-radius: 4px;
+    }
+  </style>
 </head>
 
 <body style="margin: 0; overflow: hidden;">
   <!--
-    v0.1 goal: a "power cable" and a "water pipe" on a wall marker.
-    No real data yet. The numbers in the labels are placeholders.
+    v0.2: cable sizes, flow speeds and labels now come from status.json
+    (written by engine/grid_engine.py). app.js does the reading.
 
-    How marker coordinates work (important for everything we draw):
-    - The marker is a flat square. Its center is (0, 0, 0).
-    - x = left/right along the marker
-    - z = up/down along the marker (NEGATIVE z = toward the TOP edge of the marker)
-    - y = straight out of the marker toward your phone
-    So if the marker is taped on a wall, "up the wall" means negative z,
-    and we keep things at a small y so they sit just in front of the wall.
-
-    Depth layers (y), so nothing sits at the SAME depth as something else.
-    Two surfaces at the same depth flicker ("z-fighting") because the renderer
-    can't decide which one is in front.
-      y = 0.05  power cables (closest to the wall)
-      y = 0.12  flow dots (just in front of their cable)
-      y = 0.20  water pipe (in front of the cables)
-      y = 0.30  labels (always on top)
+    Marker coordinates:
+    - x = left/right, z = up/down (NEGATIVE z = toward the TOP of the marker),
+      y = out of the wall toward the phone.
+    Depth layers (y), so nothing flickers ("z-fighting"):
+      0.05 cables, 0.12 flow dots, 0.20 water pipe, 0.30 labels.
+    Starting sizes below are placeholders; app.js replaces them.
   -->
   <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false">
 
     <a-marker preset="hiro">
 
-      <!-- ===== POWER: two thick cables carrying power UP to the upper levels ===== -->
-      <!-- Cylinders stand upright by default, so rotate 90 degrees on x to lay them flat along z -->
-      <a-cylinder position="-0.45 0.05 -0.5" rotation="90 0 0" radius="0.06" height="3" color="#7a5a1f"></a-cylinder>
-      <a-cylinder position="-0.20 0.05 -0.5" rotation="90 0 0" radius="0.06" height="3" color="#7a5a1f"></a-cylinder>
+      <!-- ===== POWER: three cables, sized by app.js ===== -->
+      <a-cylinder id="cable-up"     position="-0.50 0.05 -0.5" rotation="90 0 0" radius="0.05" height="3"   color="#7a5a1f"></a-cylinder>
+      <a-cylinder id="cable-middle" position="-0.15 0.05 0.1"  rotation="90 0 0" radius="0.03" height="1.8" color="#7a5a1f"></a-cylinder>
+      <a-cylinder id="cable-here"   position="0.85 0.05 0.5"   rotation="90 0 0" radius="0.01" height="1"   color="#7a5a1f"></a-cylinder>
 
-      <!-- "Flow" dots sliding up each cable, from the bottom (z=1) to the top (z=-2).
-           Different delays spread them out so it looks like a stream, not one blob. -->
-      <a-sphere radius="0.06" color="#f2b33d" position="-0.45 0.12 1"
-        animation="property: position; from: -0.45 0.12 1; to: -0.45 0.12 -2; dur: 1500; loop: true; easing: linear"></a-sphere>
-      <a-sphere radius="0.06" color="#f2b33d" position="-0.45 0.12 1"
-        animation="property: position; from: -0.45 0.12 1; to: -0.45 0.12 -2; dur: 1500; delay: 750; loop: true; easing: linear"></a-sphere>
-      <a-sphere radius="0.06" color="#f2b33d" position="-0.20 0.12 1"
-        animation="property: position; from: -0.20 0.12 1; to: -0.20 0.12 -2; dur: 1500; delay: 375; loop: true; easing: linear"></a-sphere>
-      <a-sphere radius="0.06" color="#f2b33d" position="-0.20 0.12 1"
-        animation="property: position; from: -0.20 0.12 1; to: -0.20 0.12 -2; dur: 1500; delay: 1125; loop: true; easing: linear"></a-sphere>
+      <a-sphere id="dot-up"     radius="0.06" color="#f2b33d" position="-0.50 0.12 1"></a-sphere>
+      <a-sphere id="dot-middle" radius="0.05" color="#f2b33d" position="-0.15 0.12 1"></a-sphere>
+      <a-sphere id="dot-here"   radius="0.03" color="#f2b33d" position="0.85 0.12 1"></a-sphere>
 
-      <!-- One thin cable for OUR level: slower flow, smaller dot = less power.
-           Moved to x=0.85 so it doesn't run through the failing pipe section (x 0.25 to 0.55). -->
-      <a-cylinder position="0.85 0.05 0.5" rotation="90 0 0" radius="0.015" height="1" color="#7a5a1f"></a-cylinder>
-      <a-sphere radius="0.03" color="#f2b33d" position="0.85 0.12 1"
-        animation="property: position; from: 0.85 0.12 1; to: 0.85 0.12 0; dur: 3000; loop: true; easing: linear"></a-sphere>
-
-      <!-- ===== WATER: one pipe running sideways, in front of the cables ===== -->
+      <!-- ===== WATER: still a placeholder (water layer is a Nov 17 booster) ===== -->
       <a-cylinder position="0 0.20 0.25" rotation="0 0 90" radius="0.05" height="2" color="#3f7f8c"></a-cylinder>
-      <!-- The failing section: slightly thicker, rust red, and it pulses bigger and smaller -->
       <a-cylinder position="0.4 0.20 0.25" rotation="0 0 90" radius="0.07" height="0.3" color="#b0412e"
         animation="property: scale; from: 1 1 1; to: 1.4 1.4 1.4; dir: alternate; dur: 600; loop: true"></a-cylinder>
 
-      <!-- ===== LABELS: on top of everything, placed beside (not on) the things they describe =====
-           a-text faces +z by default, so rotate -90 on x to lay it flat facing the phone.
-           a-text is centered on its position, so a label at x=0.6 spans roughly x=0 to 1.2,
-           which keeps it clear of the thick cables at x=-0.45 and -0.2. -->
-      <a-text value="71% goes up" position="0.6 0.30 -1.6" rotation="-90 0 0" width="3" color="#f2b33d"></a-text>
-      <a-text value="9% stays on level 40" position="0.85 0.30 1.25" rotation="-90 0 0" width="2.5" color="#f2b33d"></a-text>
-      <a-text value="Recycler 12: fails in ~3 days" position="0.3 0.30 0.55" rotation="-90 0 0" width="2.2" color="#e07a5f"></a-text>
+      <!-- ===== LABELS (text filled in by app.js) ===== -->
+      <a-text id="label-up"     value="" position="0.55 0.30 -1.9" rotation="-90 0 0" width="2.4" color="#f2b33d"></a-text>
+      <a-text id="label-middle" value="" position="0.55 0.30 -0.7" rotation="-90 0 0" width="2.4" color="#f2b33d"></a-text>
+      <a-text id="label-here"   value="" position="0.75 0.30 1.25" rotation="-90 0 0" width="2.4" color="#f2b33d"></a-text>
+      <a-text id="label-risk"   value="" position="-0.2 0.30 1.6" rotation="-90 0 0" width="3"   color="#e07a5f"></a-text>
 
     </a-marker>
 
-    <!-- The camera. AR.js moves the marker content around this camera as you move the phone. -->
     <a-entity camera></a-entity>
   </a-scene>
+
+  <!-- Control bar: which split is showing, and the button to switch -->
+  <div id="controls">
+    <span id="mode-name">Loading grid data...</span>
+    <button id="mode-button">Show fair share</button>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
