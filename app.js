@@ -99,6 +99,42 @@ function render() {
   button.textContent = mode === "directorate" ? "Show fair share" : "Show Directorate split";
   document.getElementById("mode-name").textContent =
     mode === "directorate" ? "Directorate split" : "Fair share";
+
+  // Resident notice: written ahead of time by write_notice.py (the phone never runs the AI).
+  // Shown only in Fair share mode, and only if status.json has one.
+  const notice = document.getElementById("notice");
+  const noticeText = status.notice ? status.notice.text : "";
+  document.getElementById("notice-text").textContent = noticeText;
+  notice.style.display = mode === "fair" && noticeText ? "block" : "none";
+  if (mode !== "fair") stopSpeaking();  // don't keep talking after switching away
+}
+
+// ---------- Voice: the phone reads the notice aloud ----------
+// Uses the browser's built-in speech voice (Web Speech API). No AI and no internet:
+// it just speaks the text that write_notice.py already wrote.
+
+function canSpeak() {
+  return typeof window !== "undefined" && "speechSynthesis" in window;
+}
+
+function stopSpeaking() {
+  if (canSpeak()) window.speechSynthesis.cancel();
+  const button = document.getElementById("speak-button");
+  if (button) button.textContent = "Read aloud";
+}
+
+function toggleSpeaking() {
+  if (!canSpeak() || !status || !status.notice) return;
+  // Tapping while it's talking stops it.
+  if (window.speechSynthesis.speaking) {
+    stopSpeaking();
+    return;
+  }
+  const speech = new SpeechSynthesisUtterance(status.notice.text);
+  speech.rate = 0.95;  // a little slower than normal, like an announcement
+  speech.onend = stopSpeaking;
+  window.speechSynthesis.speak(speech);
+  document.getElementById("speak-button").textContent = "Stop";
 }
 
 function showError(message) {
@@ -106,6 +142,11 @@ function showError(message) {
 }
 
 if (typeof document !== "undefined") {
+  // Hide the voice button on browsers that can't speak.
+  const speakButton = document.getElementById("speak-button");
+  if (!canSpeak()) speakButton.style.display = "none";
+  speakButton.addEventListener("click", toggleSpeaking);
+
   document.getElementById("mode-button").addEventListener("click", () => {
     mode = mode === "directorate" ? "fair" : "directorate";
     render();
