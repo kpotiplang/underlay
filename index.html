@@ -40,7 +40,9 @@
   -->
   <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false">
 
-    <a-marker preset="hiro">
+    <!-- Our own Level 40 maintenance plate (markers/l40.patt, made from markers/l40_inner.png).
+         To go back to the test marker, swap this line for:  <a-marker preset="hiro"> -->
+    <a-marker type="pattern" url="markers/l40.patt">
 
       <!-- ===== POWER: three cables, sized by app.js ===== -->
       <a-cylinder id="cable-up"     position="-0.50 0.05 -0.5" rotation="90 0 0" radius="0.05" height="3"   color="#7a5a1f"></a-cylinder>
