@@ -12,17 +12,36 @@
   <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.8/aframe/build/aframe-ar.js"></script>
 
   <style>
-    /* The control bar sits on top of the camera view at the bottom of the screen. */
+    /* Look: a resident's maintenance terminal. Warm near-black, amber = power,
+       rust/coral = danger, teal = water, monospace so it reads like equipment.
+       ui-monospace is SF Mono on iPhone; the rest are fallbacks. */
+    :root {
+      --black: #0c0c0a; --amber: #f2b33d; --text: #e8e2d4; --dim: #9a9282;
+      --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    }
+    #header, #controls {
+      position: fixed; left: 0; right: 0; z-index: 10;
+      background: rgba(12, 12, 10, 0.85); color: var(--text);
+      font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    #header { top: 0; padding: 10px 16px; font-size: 12px; color: var(--dim); }
+    #header b { color: var(--amber); font-weight: 600; }
     #controls {
-      position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 16px 28px; background: rgba(12, 12, 10, 0.82);
-      color: #e8e2d4; font-family: monospace; font-size: 15px;
+      bottom: 0; display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 16px 30px; font-size: 14px;
     }
+    /* Hazard stripe along the top edge of the control bar. */
+    #controls::before {
+      content: ""; position: absolute; left: 0; right: 0; top: 0; height: 6px;
+      background: repeating-linear-gradient(-45deg, var(--amber) 0 10px, var(--black) 10px 20px);
+    }
+    #mode-label { display: block; font-size: 11px; color: var(--dim); }
     #mode-button {
-      font: inherit; padding: 10px 14px; border: 1px solid #f2b33d;
-      background: transparent; color: #f2b33d; border-radius: 4px;
+      font: inherit; text-transform: inherit; letter-spacing: inherit;
+      padding: 10px 14px; border: 1px solid var(--amber); border-radius: 2px;
+      background: transparent; color: var(--amber);
     }
+    #mode-button:active { background: var(--amber); color: var(--black); }
   </style>
 </head>
 
@@ -74,13 +93,13 @@
            geometry width/height "auto" sizes a dark plate behind the text.
            wrap-count sets letter size: width / wrap-count = one letter's width.
            z-offset lifts the letters off their plate so they don't speckle into it. -->
-      <a-text id="label-up"     value=" " position="1.05 0.50 -1.9" rotation="-90 0 0" width="2.1" wrap-count="31" z-offset="0.03"
+      <a-text id="label-up"     value=" " position="1.05 0.50 -1.9" rotation="-90 0 0" width="2.1" wrap-count="31" z-offset="0.03" font="sourcecodepro"
         color="#f2b33d" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
-      <a-text id="label-middle" value=" " position="1.05 0.50 -0.7" rotation="-90 0 0" width="2.1" wrap-count="31" z-offset="0.03"
+      <a-text id="label-middle" value=" " position="1.05 0.50 -0.7" rotation="-90 0 0" width="2.1" wrap-count="31" z-offset="0.03" font="sourcecodepro"
         color="#f2b33d" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
-      <a-text id="label-here"   value=" " position="0.85 0.50 1.35" rotation="-90 0 0" width="2.1" wrap-count="31" z-offset="0.03"
+      <a-text id="label-here"   value=" " position="0.85 0.50 1.35" rotation="-90 0 0" width="2.1" wrap-count="31" z-offset="0.03" font="sourcecodepro"
         color="#f2b33d" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
-      <a-text id="label-risk"   value=" " position="0.40 0.50 1.85" rotation="-90 0 0" width="2.1" wrap-count="23" z-offset="0.03"
+      <a-text id="label-risk"   value=" " position="0.40 0.50 1.85" rotation="-90 0 0" width="2.1" wrap-count="23" z-offset="0.03" font="sourcecodepro"
         color="#e07a5f" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
 
     </a-marker>
@@ -88,9 +107,12 @@
     <a-entity camera></a-entity>
   </a-scene>
 
+  <!-- Header: where you are (static text) -->
+  <div id="header"><b>Underlay</b> // Plate L40-C // Level 40</div>
+
   <!-- Control bar: which split is showing, and the button to switch -->
   <div id="controls">
-    <span id="mode-name">Loading grid data...</span>
+    <span><span id="mode-label">Viewing</span><span id="mode-name">Loading grid data...</span></span>
     <button id="mode-button">Show fair share</button>
   </div>
 
