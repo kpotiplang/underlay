@@ -34,35 +34,45 @@
     Marker coordinates:
     - x = left/right, z = up/down (NEGATIVE z = toward the TOP of the marker),
       y = out of the wall toward the phone.
-    Depth layers (y), so nothing flickers ("z-fighting"):
-      0.05 cables, 0.12 flow dots, 0.20 water pipe, 0.30 labels.
+    Depth layers (y). The thickest cable reaches about y = 0.20 (radius ~0.15),
+    so everything in front of it starts past that. Overlapping surfaces at
+    almost the same depth cause speckled flicker ("z-fighting").
+      0.05  cables, and the flow dots (centered ON the cable, slightly fatter)
+      0.35  water pipe
+      0.50  labels (with a dark backing so they read at any angle)
+    flat shader = no lighting math, so colors stay even and don't speckle.
     Starting sizes below are placeholders; app.js replaces them.
   -->
   <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false">
 
-    <!-- Our own Level 40 maintenance plate (markers/l40.patt, made from markers/l40_inner.png).
+    <!-- Our own Level 40 maintenance plate (l40.patt, made from l40_inner.png with the AR.js marker generator).
          To go back to the test marker, swap this line for:  <a-marker preset="hiro"> -->
     <a-marker type="pattern" url="l40.patt">
 
       <!-- ===== POWER: three cables, sized by app.js ===== -->
-      <a-cylinder id="cable-up"     position="-0.50 0.05 -0.5" rotation="90 0 0" radius="0.05" height="3"   color="#7a5a1f"></a-cylinder>
-      <a-cylinder id="cable-middle" position="-0.15 0.05 0.1"  rotation="90 0 0" radius="0.03" height="1.8" color="#7a5a1f"></a-cylinder>
-      <a-cylinder id="cable-here"   position="0.85 0.05 0.5"   rotation="90 0 0" radius="0.01" height="1"   color="#7a5a1f"></a-cylinder>
+      <a-cylinder id="cable-up"     position="-0.50 0.05 -0.5" rotation="90 0 0" radius="0.05" height="3"   color="#7a5a1f" material="shader: flat"></a-cylinder>
+      <a-cylinder id="cable-middle" position="-0.15 0.05 0.1"  rotation="90 0 0" radius="0.03" height="1.8" color="#7a5a1f" material="shader: flat"></a-cylinder>
+      <a-cylinder id="cable-here"   position="0.85 0.05 0.5"   rotation="90 0 0" radius="0.01" height="1"   color="#7a5a1f" material="shader: flat"></a-cylinder>
 
-      <a-sphere id="dot-up"     radius="0.06" color="#f2b33d" position="-0.50 0.12 1"></a-sphere>
-      <a-sphere id="dot-middle" radius="0.05" color="#f2b33d" position="-0.15 0.12 1"></a-sphere>
-      <a-sphere id="dot-here"   radius="0.03" color="#f2b33d" position="0.85 0.12 1"></a-sphere>
+      <a-sphere id="dot-up"     radius="0.06" color="#f2b33d" material="shader: flat" position="-0.50 0.05 1"></a-sphere>
+      <a-sphere id="dot-middle" radius="0.05" color="#f2b33d" material="shader: flat" position="-0.15 0.05 1"></a-sphere>
+      <a-sphere id="dot-here"   radius="0.03" color="#f2b33d" material="shader: flat" position="0.85 0.05 1"></a-sphere>
 
-      <!-- ===== WATER: still a placeholder (water layer is a Nov 17 booster) ===== -->
-      <a-cylinder position="0 0.20 0.25" rotation="0 0 90" radius="0.05" height="2" color="#3f7f8c"></a-cylinder>
-      <a-cylinder position="0.4 0.20 0.25" rotation="0 0 90" radius="0.07" height="0.3" color="#b0412e"
+      <!-- ===== WATER: still a placeholder (not from the engine yet) ===== -->
+      <a-cylinder position="0 0.35 0.25" rotation="0 0 90" radius="0.05" height="2" color="#3f7f8c" material="shader: flat"></a-cylinder>
+      <a-cylinder position="0.4 0.35 0.25" rotation="0 0 90" radius="0.07" height="0.3" color="#b0412e" material="shader: flat"
         animation="property: scale; from: 1 1 1; to: 1.4 1.4 1.4; dir: alternate; dur: 600; loop: true"></a-cylinder>
 
-      <!-- ===== LABELS (text filled in by app.js) ===== -->
-      <a-text id="label-up"     value="" position="0.55 0.30 -1.9" rotation="-90 0 0" width="2.4" color="#f2b33d"></a-text>
-      <a-text id="label-middle" value="" position="0.55 0.30 -0.7" rotation="-90 0 0" width="2.4" color="#f2b33d"></a-text>
-      <a-text id="label-here"   value="" position="0.75 0.30 1.25" rotation="-90 0 0" width="2.4" color="#f2b33d"></a-text>
-      <a-text id="label-risk"   value="" position="-0.2 0.30 1.6" rotation="-90 0 0" width="3"   color="#e07a5f"></a-text>
+      <!-- ===== LABELS (text filled in by app.js) =====
+           geometry width/height "auto" makes A-Frame size a dark plate behind the text. -->
+      <a-text id="label-up"     value=" " position="0.75 0.50 -1.9" rotation="-90 0 0" width="2.6" color="#f2b33d" align="center"
+        geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.75; shader: flat"></a-text>
+      <a-text id="label-middle" value=" " position="0.75 0.50 -0.7" rotation="-90 0 0" width="2.6" color="#f2b33d" align="center"
+        geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.75; shader: flat"></a-text>
+      <a-text id="label-here"   value=" " position="0.85 0.50 1.35" rotation="-90 0 0" width="2.6" color="#f2b33d" align="center"
+        geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.75; shader: flat"></a-text>
+      <a-text id="label-risk"   value=" " position="0.10 0.50 1.85" rotation="-90 0 0" width="3.4" color="#e07a5f" align="center"
+        geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.75; shader: flat"></a-text>
 
     </a-marker>
 
