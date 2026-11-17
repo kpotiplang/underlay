@@ -64,5 +64,10 @@
       "people_at_risk": 4027
     }
   },
-  "note": "Simulated data. The split rules and math are real."
+  "note": "Simulated data. The split rules and math are real.",
+  "notice": {
+    "text": "NOTICE TO LEVEL 40: The Directorate is sending 3.0 MW to L40, but it needs 16.4 MW. Under a need-based split, L40 would receive 13.3 MW, reducing the number of people at risk from 12,677 to 4,027.",
+    "source": "model",
+    "reason": "ok"
+  }
 }
