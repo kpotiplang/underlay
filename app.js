@@ -68,12 +68,14 @@ function setCable(name, mw, supply) {
   const ms = flowMsFor(mw);
   dot.setAttribute("visible", ms > 0);
   if (ms > 0) {
-    dot.setAttribute("radius", radiusFor(mw) + 0.02);
+    // Dot sits ON the cable's center line and is 30% fatter than the cable,
+    // so it pokes out cleanly instead of half-hiding inside it (that caused speckles).
+    dot.setAttribute("radius", radiusFor(mw) * 1.3);
     // Replace the whole animation so the new speed takes effect right away.
     dot.setAttribute("animation", {
       property: "position",
-      from: `${c.x} 0.12 1`,
-      to: `${c.x} 0.12 ${c.topZ}`,
+      from: `${c.x} 0.05 1`,
+      to: `${c.x} 0.05 ${c.topZ}`,
       dur: ms, loop: true, easing: "linear",
     });
   }
