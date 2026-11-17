@@ -43,7 +43,10 @@
     flat shader = no lighting math, so colors stay even and don't speckle.
     Starting sizes below are placeholders; app.js replaces them.
   -->
-  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false">
+  <!-- logarithmicDepthBuffer: spreads depth precision evenly, so surfaces close together
+       don't speckle into each other at AR camera distances (the remaining speckle cause). -->
+  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false"
+           renderer="logarithmicDepthBuffer: true">
 
     <!-- Our own Level 40 maintenance plate (l40.patt, made from l40_inner.png with the AR.js marker generator).
          To go back to the test marker, swap this line for:  <a-marker preset="hiro"> -->
@@ -58,21 +61,27 @@
       <a-sphere id="dot-middle" radius="0.05" color="#f2b33d" material="shader: flat" position="-0.15 0.05 1"></a-sphere>
       <a-sphere id="dot-here"   radius="0.03" color="#f2b33d" material="shader: flat" position="0.85 0.05 1"></a-sphere>
 
-      <!-- ===== WATER: still a placeholder (not from the engine yet) ===== -->
-      <a-cylinder position="0 0.35 0.25" rotation="0 0 90" radius="0.05" height="2" color="#3f7f8c" material="shader: flat"></a-cylinder>
+      <!-- ===== WATER: still a placeholder (not from the engine yet) =====
+           The blue pipe is two pieces with a gap where the red section sits,
+           so the red never has blue hiding inside it. -->
+      <a-cylinder position="-0.375 0.35 0.25" rotation="0 0 90" radius="0.05" height="1.25" color="#3f7f8c" material="shader: flat"></a-cylinder>
+      <a-cylinder position="0.775 0.35 0.25"  rotation="0 0 90" radius="0.05" height="0.45" color="#3f7f8c" material="shader: flat"></a-cylinder>
+      <!-- Pulse only gets fatter (x and z), not longer, so it never grows into the blue pieces. -->
       <a-cylinder position="0.4 0.35 0.25" rotation="0 0 90" radius="0.07" height="0.3" color="#b0412e" material="shader: flat"
-        animation="property: scale; from: 1 1 1; to: 1.4 1.4 1.4; dir: alternate; dur: 600; loop: true"></a-cylinder>
+        animation="property: scale; from: 1 1 1; to: 1.4 1 1.4; dir: alternate; dur: 600; loop: true"></a-cylinder>
 
       <!-- ===== LABELS (text filled in by app.js) =====
-           geometry width/height "auto" makes A-Frame size a dark plate behind the text. -->
-      <a-text id="label-up"     value=" " position="0.75 0.50 -1.9" rotation="-90 0 0" width="2.6" color="#f2b33d" align="center"
-        geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.75; shader: flat"></a-text>
-      <a-text id="label-middle" value=" " position="0.75 0.50 -0.7" rotation="-90 0 0" width="2.6" color="#f2b33d" align="center"
-        geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.75; shader: flat"></a-text>
-      <a-text id="label-here"   value=" " position="0.85 0.50 1.35" rotation="-90 0 0" width="2.6" color="#f2b33d" align="center"
-        geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.75; shader: flat"></a-text>
-      <a-text id="label-risk"   value=" " position="0.10 0.50 1.85" rotation="-90 0 0" width="3.4" color="#e07a5f" align="center"
-        geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.75; shader: flat"></a-text>
+           geometry width/height "auto" sizes a dark plate behind the text.
+           wrap-count sets letter size: width / wrap-count = one letter's width.
+           z-offset lifts the letters off their plate so they don't speckle into it. -->
+      <a-text id="label-up"     value=" " position="1.05 0.50 -1.9" rotation="-90 0 0" width="2.1" wrap-count="31" z-offset="0.03"
+        color="#f2b33d" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
+      <a-text id="label-middle" value=" " position="1.05 0.50 -0.7" rotation="-90 0 0" width="2.1" wrap-count="31" z-offset="0.03"
+        color="#f2b33d" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
+      <a-text id="label-here"   value=" " position="0.85 0.50 1.35" rotation="-90 0 0" width="2.1" wrap-count="31" z-offset="0.03"
+        color="#f2b33d" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
+      <a-text id="label-risk"   value=" " position="0.40 0.50 1.85" rotation="-90 0 0" width="2.1" wrap-count="23" z-offset="0.03"
+        color="#e07a5f" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
 
     </a-marker>
 
