@@ -121,8 +121,11 @@ def build_prompt(facts):
         f"- A need-based split would give {lvl} {facts['viewer_fair']} MW.\n"
         f"- People at risk: {facts['risk_now']} now, {facts['risk_fair']} under a need-based split.\n"
     )
-    example = ("NOTICE TO LEVEL 9: The Directorate sent L2 24.0 MW though it needs 6.0 MW, "
-               "while L9 got 2.0 MW of the 11.5 MW it needs. Splitting power by need would "
+    # Wording note: every level in the example is described as "got X MW but needs Y MW".
+    # An earlier example said "got X of the Y MW it needs", and the model copied that phrase
+    # onto the upper level, which made it sound short when it really had too much.
+    example = ("NOTICE TO LEVEL 9: The Directorate gave L2 24.0 MW, but L2 needs only 6.0 MW. "
+               "L9 got 2.0 MW, but L9 needs 11.5 MW. Splitting power by need would "
                "cut people at risk from 8,410 to 2,950. Take this to your section officer.")
     return (
         f"You write short public notices for residents of {lvl} in an underground city. "
