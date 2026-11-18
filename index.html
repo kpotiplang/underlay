@@ -13,7 +13,7 @@
 
   <style>
     /* Look: a resident's maintenance terminal. Warm near-black, amber = power,
-       rust/coral = danger, teal = water, monospace so it reads like equipment.
+       rust/coral = danger, teal = water, dim off-white = hidden space, monospace so it reads like equipment.
        ui-monospace is SF Mono on iPhone; the rest are fallbacks. */
     :root {
       --black: #0c0c0a; --amber: #f2b33d; --text: #e8e2d4; --dim: #9a9282;
@@ -105,6 +105,24 @@
       <a-text value="Water main: Recycler 12 failing" position="2.08 0.50 0.25" rotation="-90 0 0" width="2.1" wrap-count="31" z-offset="0.03" font="sourcecodepro"
         color="#e07a5f" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
 
+      <!-- ===== SPACE: sealed rooms behind this wall (from engine/space.py) =====
+           Three slots; app.js sizes, places and labels them, and hides unused ones.
+           Dim off-white = hidden space. They sit just behind the wall (y = -0.02). -->
+      <a-plane id="room-0" visible="false" rotation="-90 0 0" color="#e8e2d4"
+        material="shader: flat; transparent: true; opacity: 0.18; side: double"></a-plane>
+      <a-text id="room-label-0" visible="false" value=" " rotation="-90 0 0" width="1.1" wrap-count="20" z-offset="0.03" font="sourcecodepro"
+        color="#e8e2d4" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
+      <a-plane id="room-1" visible="false" rotation="-90 0 0" color="#e8e2d4"
+        material="shader: flat; transparent: true; opacity: 0.18; side: double"></a-plane>
+      <a-text id="room-label-1" visible="false" value=" " rotation="-90 0 0" width="1.1" wrap-count="20" z-offset="0.03" font="sourcecodepro"
+        color="#e8e2d4" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
+      <a-plane id="room-2" visible="false" rotation="-90 0 0" color="#e8e2d4"
+        material="shader: flat; transparent: true; opacity: 0.18; side: double"></a-plane>
+      <a-text id="room-label-2" visible="false" value=" " rotation="-90 0 0" width="1.1" wrap-count="20" z-offset="0.03" font="sourcecodepro"
+        color="#e8e2d4" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
+      <a-text id="label-space" value=" " position="-2.6 0.50 1.85" rotation="-90 0 0" width="2.4" wrap-count="37" z-offset="0.03" font="sourcecodepro"
+        color="#e8e2d4" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
+
       <!-- ===== LABELS (text filled in by app.js) =====
            geometry width/height "auto" sizes a dark plate behind the text.
            wrap-count sets letter size: width / wrap-count = one letter's width.
@@ -138,6 +156,8 @@
     <button id="mode-button">Show fair share</button>
   </div>
 
-  <script src="app.js?v=10"></script>
+  <!-- ?v= forces Safari to fetch the newest app.js instead of an old saved copy.
+       Bump the number every time app.js changes. -->
+  <script src="app.js?v=11"></script>
 </body>
 </html>
