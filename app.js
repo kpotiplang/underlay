@@ -95,6 +95,7 @@ function render() {
   document.getElementById("label-risk").setAttribute(
     "value", `People at risk: ${risk.toLocaleString()}`
   );
+  renderSpace();
   const button = document.getElementById("mode-button");
   button.textContent = mode === "directorate" ? "Show fair share" : "Show Directorate split";
   document.getElementById("mode-name").textContent =
@@ -107,6 +108,48 @@ function render() {
   document.getElementById("notice-text").textContent = noticeText;
   notice.style.display = mode === "fair" && noticeText ? "block" : "none";
   if (mode !== "fair") stopSpeaking();  // don't keep talking after switching away
+}
+
+// ---------- Space: sealed rooms behind the wall ----------
+// Sizes come from the room's floor area. WHY square root again: a square room of
+// area A has sides of sqrt(A), so the outline's AREA matches the real floor area.
+
+const ROOM_SLOTS = 3;
+const ROOM_SCALE = 0.22;     // marker units per meter of room side
+const ROOM_ROW_Z = 0.2;      // vertical position of the row of rooms on the wall
+const ROOM_FIRST_X = -1.45;  // first room sits just left of the cables
+const ROOM_GAP_X = 1.15;     // space between room centers
+
+function roomSide(areaM2) {
+  return ROOM_SCALE * Math.sqrt(Math.max(areaM2, 0));
+}
+
+function renderSpace() {
+  const space = status.space;
+  const rooms = space ? space.behind_plate : [];
+  for (let i = 0; i < ROOM_SLOTS; i++) {
+    const plane = document.getElementById("room-" + i);
+    const label = document.getElementById("room-label-" + i);
+    const room = rooms[i];
+    if (!room) {               // fewer rooms than slots: hide the extra slots
+      plane.setAttribute("visible", false);
+      label.setAttribute("visible", false);
+      continue;
+    }
+    const side = roomSide(room.area_m2);
+    const x = ROOM_FIRST_X - i * ROOM_GAP_X;
+    plane.setAttribute("width", side);
+    plane.setAttribute("height", side);
+    plane.setAttribute("position", `${x} -0.02 ${ROOM_ROW_Z}`);
+    plane.setAttribute("visible", true);
+    // Label sits just above the room (negative z = up the wall).
+    label.setAttribute("position", `${x} 0.50 ${ROOM_ROW_Z - side / 2 - 0.12}`);
+    label.setAttribute("value", `Sealed ${room.area_m2} m2, ${room.years_empty} yrs`);
+    label.setAttribute("visible", true);
+  }
+  document.getElementById("label-space").setAttribute(
+    "value", space ? `Sealed rooms could house ${space.families_housed} families` : " "
+  );
 }
 
 // ---------- Voice: the phone reads the notice aloud ----------
@@ -170,5 +213,5 @@ if (typeof document !== "undefined") {
 
 // Lets Node run the tests on the helper functions (ignored by the browser).
 if (typeof module !== "undefined") {
-  module.exports = { groupTotals, radiusFor, flowMsFor, percent };
+  module.exports = { groupTotals, radiusFor, flowMsFor, percent, roomSide };
 }
