@@ -20,6 +20,7 @@ from pathlib import Path
 
 from fair_share import water_fill, unmet_need
 from space import build_space
+from water import build_water
 
 # ----------------------------------------------------------------------
 # The district. Five levels, from the comfortable top to the hot bottom.
@@ -137,6 +138,7 @@ def build_status(supply=SUPPLY_MW, raw_levels=LEVELS, viewer=VIEWER_LEVEL):
             "fair": summarize(fair, levels, supply, viewer),
         },
         "space": build_space(),   # sealed rooms on this level (see space.py)
+        "water": build_water(),   # recycler failure prediction (see water.py)
         "note": "Simulated data. The split rules and math are real.",
     }
 
@@ -165,6 +167,9 @@ def main():
     sp = status["space"]
     print(f"\nSealed rooms on {VIEWER_LEVEL}: {sp['sealed_rooms']}, could house "
           f"{sp['families_housed']} of {sp['crowded_families']} crowded families")
+    wt = status["water"]
+    print(f"{wt['recycler']}: unsafe in {wt['days_to_limit']} days ({wt['state']}), "
+          f"{wt['homes_served']} homes served")
     print(f"\nWrote {out_path}")
 
 
