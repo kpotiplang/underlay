@@ -96,6 +96,7 @@ function render() {
     "value", `People at risk: ${risk.toLocaleString()}`
   );
   renderSpace();
+  renderWater();
   const button = document.getElementById("mode-button");
   button.textContent = mode === "directorate" ? "Show fair share" : "Show Directorate split";
   document.getElementById("mode-name").textContent =
@@ -150,6 +151,26 @@ function renderSpace() {
   document.getElementById("label-space").setAttribute(
     "value", space ? `Sealed rooms could house ${space.families_housed} families` : " "
   );
+}
+
+// ---------- Water: Recycler 12 failure prediction (from engine/water.py) ----------
+
+// Label text for each state. Kept short so it fits on one line (31 letters).
+function waterLabel(water) {
+  if (!water) return " ";
+  if (water.state === "unsafe") return `${water.recycler}: UNSAFE NOW`;
+  if (water.state === "warning") return `${water.recycler}: unsafe in ${water.days_to_limit} days`;
+  return `${water.recycler}: water OK`;
+}
+
+function renderWater() {
+  const water = status.water;
+  const fault = document.getElementById("water-fault");
+  // Failing (warning or unsafe): red and pulsing. OK or no data: plain teal, still.
+  const failing = water && water.state !== "ok";
+  fault.setAttribute("color", failing ? "#b0412e" : "#3f7f8c");
+  fault.setAttribute("animation", "enabled", failing);
+  document.getElementById("label-water").setAttribute("value", waterLabel(water));
 }
 
 // ---------- Voice: the phone reads the notice aloud ----------
@@ -213,5 +234,5 @@ if (typeof document !== "undefined") {
 
 // Lets Node run the tests on the helper functions (ignored by the browser).
 if (typeof module !== "undefined") {
-  module.exports = { groupTotals, radiusFor, flowMsFor, percent, roomSide };
+  module.exports = { groupTotals, radiusFor, flowMsFor, percent, roomSide, waterLabel };
 }
