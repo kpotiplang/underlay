@@ -108,17 +108,19 @@
 
       <!-- ===== SPACE: sealed rooms behind this wall (from engine/space.py) =====
            Three slots; app.js sizes, places and labels them, and hides unused ones.
-           Dim off-white = hidden space. They sit just behind the wall (y = -0.02). -->
-      <a-plane id="room-0" visible="false" rotation="-90 0 0" color="#e8e2d4"
-        material="shader: flat; transparent: true; opacity: 0.18; side: double"></a-plane>
+           Dark see-through squares read as hollow space on a light wall (an earlier
+           faint off-white version was invisible on real walls). They sit just behind
+           the wall (y = -0.02); the labels stay off-white. -->
+      <a-plane id="room-0" visible="false" rotation="-90 0 0" color="#0c0c0a"
+        material="shader: flat; transparent: true; opacity: 0.55; side: double"></a-plane>
       <a-text id="room-label-0" visible="false" value=" " rotation="-90 0 0" width="1.1" wrap-count="20" z-offset="0.03" font="sourcecodepro"
         color="#e8e2d4" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
-      <a-plane id="room-1" visible="false" rotation="-90 0 0" color="#e8e2d4"
-        material="shader: flat; transparent: true; opacity: 0.18; side: double"></a-plane>
+      <a-plane id="room-1" visible="false" rotation="-90 0 0" color="#0c0c0a"
+        material="shader: flat; transparent: true; opacity: 0.55; side: double"></a-plane>
       <a-text id="room-label-1" visible="false" value=" " rotation="-90 0 0" width="1.1" wrap-count="20" z-offset="0.03" font="sourcecodepro"
         color="#e8e2d4" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
-      <a-plane id="room-2" visible="false" rotation="-90 0 0" color="#e8e2d4"
-        material="shader: flat; transparent: true; opacity: 0.18; side: double"></a-plane>
+      <a-plane id="room-2" visible="false" rotation="-90 0 0" color="#0c0c0a"
+        material="shader: flat; transparent: true; opacity: 0.55; side: double"></a-plane>
       <a-text id="room-label-2" visible="false" value=" " rotation="-90 0 0" width="1.1" wrap-count="20" z-offset="0.03" font="sourcecodepro"
         color="#e8e2d4" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
       <a-text id="label-space" value=" " position="-2.6 0.50 1.85" rotation="-90 0 0" width="2.4" wrap-count="37" z-offset="0.03" font="sourcecodepro"
