@@ -93,9 +93,19 @@
     ],
     "note": "Simulated building record. The housing rule is real."
   },
+  "water": {
+    "recycler": "Recycler 12",
+    "latest_ntu": 3.34,
+    "limit_ntu": 4.0,
+    "trend_ntu_per_day": 0.178,
+    "days_to_limit": 3,
+    "state": "warning",
+    "homes_served": 340,
+    "note": "Simulated sensor readings. The trend math is real."
+  },
   "note": "Simulated data. The split rules and math are real.",
   "notice": {
-    "text": "NOTICE TO LEVEL 40: The Directorate gave L40 3.0 MW, but L40 needs 16.4 MW. Under a need-based split, L40 would receive 13.3 MW. This change would reduce people at risk from 12,677 to 4,027.",
+    "text": "NOTICE TO LEVEL 40: The Directorate gave L40 3.0 MW, but L40 needs 16.4 MW. Under a need-based split, L40 would receive 13.3 MW. This change would reduce the number of people at risk from 12,677 to 4,027.",
     "source": "model",
     "reason": "ok"
   }
