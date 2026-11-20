@@ -93,16 +93,17 @@
       <a-sphere id="dot-middle" radius="0.05" color="#f2b33d" material="shader: flat" position="-0.15 0.05 1"></a-sphere>
       <a-sphere id="dot-here"   radius="0.03" color="#f2b33d" material="shader: flat" position="0.85 0.05 1"></a-sphere>
 
-      <!-- ===== WATER: PROTOTYPE layer, not from the engine yet (say so in the video) =====
+      <!-- ===== WATER: Recycler 12, prediction from engine/water.py =====
            The blue pipe is two pieces with a gap where the red section sits,
-           so the red never has blue hiding inside it (that caused speckles). -->
+           so the red never has blue hiding inside it (that caused speckles).
+           app.js shows the red section and sets the label from status.json. -->
       <a-cylinder position="-0.375 0.35 0.25" rotation="0 0 90" radius="0.05" height="1.25" color="#3f7f8c" material="shader: flat"></a-cylinder>
       <a-cylinder position="0.775 0.35 0.25"  rotation="0 0 90" radius="0.05" height="0.45" color="#3f7f8c" material="shader: flat"></a-cylinder>
-      <!-- Pulse only gets fatter (x and z), not longer, so it never grows into the blue pieces. -->
-      <a-cylinder position="0.4 0.35 0.25" rotation="0 0 90" radius="0.07" height="0.3" color="#b0412e" material="shader: flat"
+      <!-- Middle section: red + pulsing when failing, plain teal when OK. Pulse only gets fatter, not longer. -->
+      <a-cylinder id="water-fault" position="0.4 0.35 0.25" rotation="0 0 90" radius="0.07" height="0.3" color="#b0412e" material="shader: flat"
         animation="property: scale; from: 1 1 1; to: 1.4 1 1.4; dir: alternate; dur: 600; loop: true"></a-cylinder>
       <!-- Label sits past the pipe's right end (pipe ends at x=1.0), so its backing covers no cables. -->
-      <a-text value="Water main: Recycler 12 failing" position="2.08 0.50 0.25" rotation="-90 0 0" width="2.1" wrap-count="31" z-offset="0.03" font="sourcecodepro"
+      <a-text id="label-water" value=" " position="2.08 0.50 0.25" rotation="-90 0 0" width="2.1" wrap-count="31" z-offset="0.03" font="sourcecodepro"
         color="#e07a5f" align="center" geometry="primitive: plane; width: auto; height: auto" material="color: #0c0c0a; opacity: 0.8; shader: flat"></a-text>
 
       <!-- ===== SPACE: sealed rooms behind this wall (from engine/space.py) =====
@@ -158,6 +159,6 @@
 
   <!-- ?v= forces Safari to fetch the newest app.js instead of an old saved copy.
        Bump the number every time app.js changes. -->
-  <script src="app.js?v=11"></script>
+  <script src="app.js?v=12"></script>
 </body>
 </html>
