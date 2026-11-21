@@ -4,7 +4,7 @@
 
 Underlay is a phone AR tool for residents of the Hollow. You point an iPhone at a Directorate maintenance plate on a tunnel wall, and it shows what's behind the wall: where the level's power actually goes, sealed rooms nobody is allowed to use, and a water recycler that's about to fail. One tap switches from the Directorate's power split to a fair one, and the app writes a notice residents can post or play out loud.
 
-**Demo video:** VIDEO_LINK_HERE
+**Demo video:** https://youtu.be/Povk6Eb29zI
 
 **Live demo:** https://kpotiplang.github.io/underlay/ (open in Safari on an iPhone and point it at the plate in [`l40_plate.pdf`](l40_plate.pdf). It needs the plate to show anything, so the video is the quickest way to see it.)
 
