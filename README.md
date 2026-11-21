@@ -4,7 +4,9 @@
 
 Underlay is a phone AR tool for residents of the Hollow. You point an iPhone at a Directorate maintenance plate on a tunnel wall, and it shows what's behind the wall: where the level's power actually goes, sealed rooms nobody is allowed to use, and a water recycler that's about to fail. One tap switches from the Directorate's power split to a fair one, and the app writes a notice residents can post or play out loud.
 
-**Live demo:** https://kpotiplang.github.io/underlay/ (open in Safari on an iPhone and point it at the plate in `l40_plate.pdf`)
+**Demo video:** VIDEO_LINK_HERE
+
+**Live demo:** https://kpotiplang.github.io/underlay/ (open in Safari on an iPhone and point it at the plate in [`l40_plate.pdf`](l40_plate.pdf). It needs the plate to show anything, so the video is the quickest way to see it.)
 
 ## The problem
 
@@ -77,6 +79,7 @@ To see the AR, print `l40_plate.pdf` at actual size on matte paper (or show it f
 | `index.html`, `app.js` | The AR page |
 | `status.json` | The engine's output, which the page reads |
 | `l40.patt` | The trained marker pattern for the Level 40 plate |
+| `l40_plate.pdf` | The printable Level 40 maintenance plate |
 | `Engine/fair_share.py` | Water-filling fair split |
 | `Engine/grid_engine.py` | District model, both splits, people at risk |
 | `Engine/space.py` | Sealed rooms and families housed |
@@ -86,8 +89,8 @@ To see the AR, print `l40_plate.pdf` at actual size on matte paper (or show it f
 
 ## What's next
 
-- Drive the water layer from live sensor data instead of a fixed log.
-- More plates, so each wall shows its own section of the grid.
+- Connect the engine to live sensor data instead of simulated logs.
+- Cover the whole Hollow: right now it's one wall on one level, so each wall would get its own plate showing its own section of the grid.
 - A dashboard version for a level's control room.
 - Repair steps for maintainers: tap a failing pipe to see how to fix it.
 
